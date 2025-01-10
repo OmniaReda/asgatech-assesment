@@ -1,0 +1,142 @@
+<div class="container mx-auto p-4">
+    <!-- Header Section -->
+    <div class="border-b pb-4 mb-6">
+      <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+        <h1 class="text-2xl font-bold">Products</h1>
+        <!-- Cart Counter & New Order Button -->
+        <div class="flex items-center gap-4">
+          <button 
+            (click)="proceedToOrder()"
+            [disabled]="getTotalSelectedItems() === 0"
+            class="relative inline-flex items-center px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 
+                   disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                    d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+            </svg>
+            Cart ({{ getTotalSelectedItems() }})
+          </button>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Loading State -->
+    @if (loading) {
+      <div class="flex justify-center items-center h-64">
+        <div class="text-gray-600">Loading products...</div>
+      </div>
+    } 
+    <!-- Error State -->
+    @else if (error) {
+      <div class="bg-red-100 text-red-700 p-4 rounded">
+        {{ error }}
+      </div>
+    } 
+    <!-- Products Grid -->
+    @else {
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        @for (product of products; track product.ProductId) {
+          <div class="bg-white rounded-lg shadow-md overflow-hidden transition-all duration-200 hover:shadow-lg"
+               [class.bg-red-50]="product.AvailablePieces < 10">
+            <!-- Product Image -->
+            <img [src]="product.ProductImg" 
+                 [alt]="product.ProductName" 
+                 class="w-full h-48 object-cover">
+            
+            <!-- Product Details -->
+            <div class="p-4">
+              <h3 class="text-lg font-bold">{{product.ProductName}}</h3>
+              <p class="text-gray-600 mb-2">Price: ${{product.ProductPrice}}</p>
+              
+              <!-- Quantity Display and Edit -->
+              @if (editingProduct?.ProductId === product.ProductId) {
+                <div class="bg-gray-50 p-3 rounded-lg mb-3">
+                  <div class="flex items-center justify-between mb-2">
+                    <span class="text-gray-700">Stock Quantity:</span>
+                    <div class="flex items-center space-x-2">
+                      <button 
+                        (click)="updateQuantity(-1)"
+                        class="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full hover:bg-gray-300">
+                        -
+                      </button>
+                      <input 
+                        type="number" 
+                        [(ngModel)]="newQuantity" 
+                        class="w-20 text-center border rounded-md px-2 py-1"
+                        min="0">
+                      <button 
+                        (click)="updateQuantity(1)"
+                        class="w-8 h-8 flex items-center justify-center bg-gray-200 rounded-full hover:bg-gray-300">
+                        +
+                      </button>
+                    </div>
+                  </div>
+                  <div class="flex space-x-2">
+                    <button 
+                      (click)="saveQuantity()"
+                      class="flex-1 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                      Save
+                    </button>
+                    <button 
+                      (click)="cancelEditing()"
+                      class="flex-1 bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
+                      Cancel
+                    </button>
+                  </div>
+                </div>
+              } @else {
+                <div class="flex items-center justify-between mb-3">
+                  <p [class.text-red-500]="product.AvailablePieces < 10"
+                     class="font-medium">
+                    Available: {{product.AvailablePieces}} pieces
+                  </p>
+                  <button 
+                    (click)="startEditing(product)"
+                    class="text-blue-500 hover:text-blue-700 flex items-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                            d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
+                    </svg>
+                    Edit Stock
+                  </button>
+                </div>
+              }
+  
+              <!-- Add to Cart Section -->
+              <div class="flex items-center gap-2">
+                @if (getSelectedQuantity(product.ProductId) > 0) {
+                  <div class="flex-1 flex items-center justify-between bg-gray-100 rounded-lg p-2">
+                    <button 
+                      (click)="decrementQuantity(product)"
+                      class="w-8 h-8 flex items-center justify-center bg-white rounded-full hover:bg-gray-200">
+                      -
+                    </button>
+                    <span class="font-medium">{{ getSelectedQuantity(product.ProductId) }}</span>
+                    <button 
+                      (click)="incrementQuantity(product)"
+                      [disabled]="getSelectedQuantity(product.ProductId) >= product.AvailablePieces"
+                      class="w-8 h-8 flex items-center justify-center bg-white rounded-full hover:bg-gray-200 
+                             disabled:bg-gray-100 disabled:cursor-not-allowed">
+                      +
+                    </button>
+                  </div>
+                } @else {
+                  <button 
+                    (click)="addToCart(product)"
+                    [disabled]="product.AvailablePieces === 0"
+                    class="w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 
+                           disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors">
+                    Add to Cart
+                  </button>
+                }
+              </div>
+            </div>
+          </div>
+        } @empty {
+          <div class="col-span-full text-center py-8 text-gray-500">
+            No products available
+          </div>
+        }
+      </div>
+    }
+  </div>
