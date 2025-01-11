@@ -25,10 +25,31 @@
                   Available: {{product.AvailablePieces}}
                 </p>
               </div>
-              <button (click)="addToOrder(product)"
-                      class="bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-600">
-                Add
-              </button>
+               @if (getSelectedQuantity(product.ProductId)) {
+                  <div class="flex-1 flex items-center justify-between bg-gray-100 rounded-lg p-2">
+                    <button 
+                      (click)="decrementQuantity(product)"
+                      class="w-8 h-8 flex items-center justify-center bg-white rounded-full hover:bg-gray-200">
+                      -
+                    </button>
+                    <span class="font-medium">{{ getSelectedQuantity(product.ProductId) }}</span>
+                    <button 
+                      (click)="incrementQuantity(product)"
+                      [disabled]="product.AvailablePieces === 0"
+                      class="w-8 h-8 flex items-center justify-center bg-white rounded-full hover:bg-gray-200 
+                             disabled:bg-gray-100 disabled:cursor-not-allowed">
+                      +
+                    </button>
+                  </div>
+                } @else {
+                  <button 
+                    (click)="addToOrder(product)"
+                    [disabled]="product.AvailablePieces === 0"
+                    class="w-full bg-teal-500 text-white px-4 py-2 rounded-lg hover:bg-teal-600 
+                           disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors">
+                    Add 
+                  </button>
+                }
             </div>
           }
         </div>
@@ -67,6 +88,7 @@
             <p class="text-gray-500">No items selected</p>
           } @else {
             @for (item of selectedItems; track item.product.ProductId; let i = $index) {
+              @if(item.quantity){
               <div class="border-b py-2 flex justify-between items-center">
                   <div class="flex items-center">
                     <img [src]="item.product.ProductImg" 
@@ -84,6 +106,7 @@
                   Remove
                 </button>
               </div>
+            }
             }
             <div class="mt-4 text-right">
               <p class="font-bold">Total: ${{calculateTotal().toFixed(2)}}</p>

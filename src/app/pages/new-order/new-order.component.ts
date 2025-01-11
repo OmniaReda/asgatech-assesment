@@ -64,7 +64,31 @@ export class NewOrderComponent implements OnInit {
       }
     });
   }
-  
+  incrementQuantity(product: Product) {
+    this.productService.updateStock(product.ProductId, 1);
+    let index= this.selectedItems.findIndex(
+      item => item.product.ProductId === product.ProductId
+    )
+    this.selectedItems[index].quantity++;
+    }
+
+  decrementQuantity(product: Product) {
+    this.productService.updateStock(product.ProductId, -1);
+
+    let index= this.selectedItems.findIndex(
+      item => item.product.ProductId === product.ProductId
+    )
+    this.selectedItems[index].quantity--;
+  }
+  getSelectedQuantity(productId: number) {
+    console.log(this.selectedItems.find(
+      item => item.product.ProductId === productId
+    ))
+    return this.selectedItems.find(
+      item => item.product.ProductId === productId
+    )?.quantity
+  }
+
   existingItem(product:Product) {
     return this.selectedItems.find(
     item => item.product.ProductId === product.ProductId
@@ -72,6 +96,8 @@ export class NewOrderComponent implements OnInit {
   }
 
   addToOrder(product: Product) {
+    this.productService.updateStock(product.ProductId, +1);
+
     const existingItem = this.selectedItems.find(
       item => item.product.ProductId === product.ProductId
     );
