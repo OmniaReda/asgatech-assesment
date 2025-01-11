@@ -1,0 +1,71 @@
+`
+<div class="relative">
+  <button 
+    (click)="toggleCart()"
+    class="inline-flex items-center px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 
+           disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+    </svg>
+    Cart ({{ getTotalItems() }})
+  </button>
+
+  <!-- Cart Dropdown -->
+  @if (isOpen) {
+    <div class="absolute right-0 mt-2 w-96 bg-white rounded-lg shadow-xl z-50">
+      <div class="p-4">
+        <h3 class="text-lg font-semibold mb-4">Shopping Cart</h3>
+        @if (cartItems.size === 0) {
+          <p class="text-gray-500 text-center py-4">Your cart is empty</p>
+        } @else {
+          <!-- Cart Items -->
+          <div class="space-y-4 max-h-96 overflow-auto">
+            @for (item of getCartItems(); track item.product.ProductId) {
+              <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                  <img [src]="item.product.ProductImg" 
+                       [alt]="item.product.ProductName"
+                       class="w-12 h-12 object-cover rounded">
+                  <div class="ml-4">
+                    <h4 class="font-medium">{{ item.product.ProductName }}</h4>
+                    <p class="text-sm text-gray-500">
+                      ${{ item.product.ProductPrice }} × {{ item.quantity }}
+                    </p>
+                  </div>
+                </div>
+                <button 
+                  (click)="removeItem(item.product.ProductId)"
+                  class="text-red-500 hover:text-red-700">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                    <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd" />
+                  </svg>
+                </button>
+              </div>
+            }
+          </div>
+          <!-- Cart Footer -->
+          <div class="mt-4 pt-4 border-t">
+            <div class="flex justify-between font-semibold mb-4">
+              <span>Total:</span>
+              <span>${{ getTotal().toFixed(2) }}</span>
+            </div>
+            <div class="flex gap-2">
+              <button 
+                (click)="clearCart()"
+                class="flex-1 px-4 py-2 bg-gray-200 text-gray-800 rounded hover:bg-gray-300">
+                Clear Cart
+              </button>
+              <button 
+                (click)="checkout()"
+                class="flex-1 px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600">
+                Checkout
+              </button>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  }
+</div>
+`
