@@ -23,6 +23,10 @@ npm run start
 
 The project contains the following structure:
 src/
+├── medels/
+│ ├── customer.model # Interface for customer.
+│ ├── order.model # Interface for order.
+│ ├── product.model # Interface for product data.
 ├── pages/
 │ ├── Products # Displays a list of products.
 │ ├── Orders # Displays a list of orders.
