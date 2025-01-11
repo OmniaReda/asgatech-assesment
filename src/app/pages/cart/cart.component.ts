@@ -1,58 +1,34 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+// src/app/pages/products/products.component.ts
+import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 import { Product } from '../../models/product';
 
-export interface CartItem {
-  product: Product;
-  quantity: number;
-}
-
-@Injectable({
-  providedIn: 'root'
+@Component({
+  selector: 'app-cart',
+  standalone: true,
+  imports: [CommonModule, RouterModule, FormsModule],
+  templateUrl: './cart.component.html',
+  styleUrl: './cart.component.scss'
 })
-export class CartService {
-  private cartItems = new BehaviorSubject<Map<number, CartItem>>(new Map());
-  cartItems$ = this.cartItems.asObservable();
+export class CartComponent implements OnInit {
+  isOpen:boolean = true;
+  cartItems:[{product:Product,quantity:number}]=[{product:{AvailablePieces:0,ProductId:0,ProductImg:'',ProductName:'ssss',ProductPrice:30},quantity:0}]
+  constructor(
+  ) {}
 
-  addToCart(product: Product, quantity: number = 1) {
-    const currentItems = this.cartItems.value;
-    const existingItem = currentItems.get(product.ProductId);
-
-    if (existingItem) {
-      existingItem.quantity += quantity;
-      currentItems.set(product.ProductId, existingItem);
-    } else {
-      currentItems.set(product.ProductId, { product, quantity });
-    }
-
-    this.cartItems.next(new Map(currentItems));
+  ngOnInit() {
+    const storageVal = localStorage.getItem('selectedItems')
+    this.cartItems = storageVal ? JSON.parse(storageVal) : []
   }
-
-  removeFromCart(productId: number) {
-    const currentItems = this.cartItems.value;
-    currentItems.delete(productId);
-    this.cartItems.next(new Map(currentItems));
+  checkout(){}
+  getCartItems(){
+    return this.cartItems;
   }
-
-  updateQuantity(productId: number, quantity: number) {
-    const currentItems = this.cartItems.value;
-    const item = currentItems.get(productId);
-    if (item) {
-      item.quantity = quantity;
-      currentItems.set(productId, item);
-      this.cartItems.next(new Map(currentItems));
-    }
+  getTotal(){
+    return 2
   }
-
-  clearCart() {
-    this.cartItems.next(new Map());
-  }
-
-  getTotalItems(): number {
-    let total = 0;
-    this.cartItems.value.forEach(item => {
-      total += item.quantity;
-    });
-    return total;
-  }
+  clearCart(){}
+  removeItem(productID:number){}
 }

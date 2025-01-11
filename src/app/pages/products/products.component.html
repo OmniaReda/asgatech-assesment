@@ -114,7 +114,7 @@
                     <span class="font-medium">{{ getSelectedQuantity(product.ProductId) }}</span>
                     <button 
                       (click)="incrementQuantity(product)"
-                      [disabled]="getSelectedQuantity(product.ProductId) >= product.AvailablePieces"
+                      [disabled]="product.AvailablePieces === 0"
                       class="w-8 h-8 flex items-center justify-center bg-white rounded-full hover:bg-gray-200 
                              disabled:bg-gray-100 disabled:cursor-not-allowed">
                       +

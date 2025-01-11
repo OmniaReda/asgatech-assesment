@@ -68,17 +68,17 @@
           } @else {
             @for (item of selectedItems; track item.product.ProductId; let i = $index) {
               <div class="border-b py-2 flex justify-between items-center">
-                <div>
-                  <p>{{item.product.ProductName}}</p>
-                  <p class="text-sm text-gray-600">
-                    ${{item.product.ProductPrice}} x 
-                    <input type="number" [(ngModel)]="item.quantity"
-                           (change)="updateQuantity(item, item.quantity)"
-                           class="w-16 border rounded px-2 py-1"
-                           [max]="item.product.AvailablePieces"
-                           min="1">
-                  </p>
-                </div>
+                  <div class="flex items-center">
+                    <img [src]="item.product.ProductImg" 
+                         [alt]="item.product.ProductName"
+                         class="w-12 h-12 object-cover rounded">
+                    <div class="ml-4">
+                      <h4 class="font-medium">{{ item.product.ProductName }}</h4>
+                      <p class="text-sm text-gray-500">
+                        ${{ item.product.ProductPrice }} × {{ item.quantity }}
+                      </p>
+                    </div>
+                  </div>
                 <button (click)="removeItem(i)"
                         class="text-red-500 hover:text-red-700">
                   Remove

@@ -100,7 +100,7 @@ export class ProductsComponent implements OnInit {
   }
   incrementQuantity(product: Product) {
     const currentQty = this.selectedQuantities.get(product.ProductId) || 0;
-    if (currentQty < product.AvailablePieces) {
+    if (product.AvailablePieces>0) {
       this.productService.updateStock(product.ProductId, 1);
       this.selectedQuantities.set(product.ProductId, currentQty + 1);
     }
@@ -130,15 +130,17 @@ export class ProductsComponent implements OnInit {
     if (this.getTotalSelectedItems() > 0) {
       // Convert selected quantities to order items
       const items = Array.from(this.selectedQuantities.entries())
+      
         .map(([productId, quantity]) => {
           const product = this.products.find(p => p.ProductId === productId);
           return product ? { product, quantity } : null;
         })
         .filter(item => item !== null);
+        localStorage.setItem('selectedItems',JSON.stringify(items))
 
       // Navigate to new order with selected items
-      this.router.navigate(['/new-order']);
-    }
+      this.router.navigate(['/new-order']); 
+  }
   }
 
 

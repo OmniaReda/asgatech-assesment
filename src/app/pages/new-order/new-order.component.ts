@@ -39,6 +39,8 @@ export class NewOrderComponent implements OnInit {
 
   ngOnInit() {
     this.loadData();
+    const storageVal = localStorage.getItem('selectedItems')
+    this.selectedItems = storageVal ? JSON.parse(storageVal) : []
   }
 
   loadData() {
@@ -62,12 +64,17 @@ export class NewOrderComponent implements OnInit {
       }
     });
   }
+  
+  existingItem(product:Product) {
+    return this.selectedItems.find(
+    item => item.product.ProductId === product.ProductId
+  );
+  }
 
   addToOrder(product: Product) {
     const existingItem = this.selectedItems.find(
       item => item.product.ProductId === product.ProductId
     );
-
     if (existingItem) {
       existingItem.quantity++;
     } else {
@@ -108,7 +115,8 @@ export class NewOrderComponent implements OnInit {
       })),
       PaymentType: this.paymentType
     };
-  
+    console.log(newOrder)
+  localStorage.removeItem('selectedItems')
     this.orderService.addOrder(newOrder).subscribe({
       next: () => {
         this.router.navigate(['/orders']);

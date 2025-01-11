@@ -1,6 +1,6 @@
 `
 <div class="relative">
-  <button 
+  <!-- <button 
     (click)="toggleCart()"
     class="inline-flex items-center px-4 py-2 bg-teal-500 text-white rounded hover:bg-teal-600 
            disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors">
@@ -9,14 +9,14 @@
             d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
     </svg>
     Cart ({{ getTotalItems() }})
-  </button>
+  </button> -->
 
   <!-- Cart Dropdown -->
   @if (isOpen) {
     <div class="absolute right-0 mt-2 w-96 bg-white rounded-lg shadow-xl z-50">
       <div class="p-4">
         <h3 class="text-lg font-semibold mb-4">Shopping Cart</h3>
-        @if (cartItems.size === 0) {
+        @if (!cartItems.length ) {
           <p class="text-gray-500 text-center py-4">Your cart is empty</p>
         } @else {
           <!-- Cart Items -->
