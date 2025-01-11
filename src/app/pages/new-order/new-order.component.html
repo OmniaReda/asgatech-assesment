@@ -26,7 +26,7 @@
                 </p>
               </div>
               <button (click)="addToOrder(product)"
-                      class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                      class="bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-600">
                 Add
               </button>
             </div>
@@ -94,7 +94,7 @@
         <!-- Submit Button -->
         <button (click)="submitOrder()"
                 [disabled]="selectedItems.length === 0 || !selectedCustomerId"
-                class="w-full bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600 disabled:bg-gray-400">
+                class="w-full bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-600 disabled:bg-gray-400">
           Create Order
         </button>
 

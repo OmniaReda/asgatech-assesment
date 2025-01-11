@@ -8,7 +8,7 @@
           <button 
             (click)="proceedToOrder()"
             [disabled]="getTotalSelectedItems() === 0"
-            class="relative inline-flex items-center px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 
+            class="relative inline-flex items-center px-4 py-2 bg-teal-500 text-white rounded hover:bg-teal-600 
                    disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors">
             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
@@ -74,7 +74,7 @@
                   <div class="flex space-x-2">
                     <button 
                       (click)="saveQuantity()"
-                      class="flex-1 bg-green-500 text-white px-4 py-2 rounded hover:bg-green-600">
+                      class="flex-1 bg-teal-500 text-white px-4 py-2 rounded hover:bg-teal-600">
                       Save
                     </button>
                     <button 
@@ -124,7 +124,7 @@
                   <button 
                     (click)="addToCart(product)"
                     [disabled]="product.AvailablePieces === 0"
-                    class="w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 
+                    class="w-full bg-teal-500 text-white px-4 py-2 rounded-lg hover:bg-teal-600 
                            disabled:bg-gray-300 disabled:cursor-not-allowed transition-colors">
                     Add to Cart
                   </button>
